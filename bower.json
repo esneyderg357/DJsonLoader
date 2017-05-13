@@ -27,9 +27,8 @@
   "homepage": "http://djsonloader.blogspot.com/",
   "ignore": [
     "examples",
-    "bower_components",
     "lib",
-    "packaque.json",
+    "package.json",
     "*.md"
   ],
   "dependencies": {
