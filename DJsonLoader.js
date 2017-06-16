@@ -1,5 +1,5 @@
 /*
- *DJsonLoader v1.0.0
+ *DJsonLoader v1.0.2
  *
  * Copyright (C) 2017 David Esneyder Jerez Garnica
  * Contact: esneyderg357@gmail.com
@@ -58,6 +58,7 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 	}
 	
 	function load($field,value){
+		value=String(value);
 		var tag=$field.prop('tagName');
 		switch(tag.toLowerCase()){
 			case 'input':
@@ -102,21 +103,23 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 	}
 	
 	function explore($container,json){
-		$.each(json,function(key,value){
-			var type=typeof(value);
-			var array=Array.isArray(value);
-			if(type=='object'&&!array){
-				explore($container,value);
-			}
-			else {
-				var $fields=$container.find("[name='"+key+"']")
-						.add($container.find("."+key))
-						.add($container.find("[data-djload='"+key+"']"));
-				for(var i=0;i<$fields.length;i++){
-					load($($fields[i]),value);
+		if(json!=null&&json!=undefined){
+			$.each(json,function(key,value){
+				var type=typeof(value);
+				var array=Array.isArray(value);
+				if(type=='object'&&!array){
+					explore($container,value);
 				}
-			}
-		});
+				else {
+					var $fields=$container.find("[name='"+key+"']")
+							.add($container.find("."+key))
+							.add($container.find("[data-djload='"+key+"']"));
+					for(var i=0;i<$fields.length;i++){
+						load($($fields[i]),value);
+					}
+				}
+			});
+		}
 	}
 	
 	function reset($container,tag,properties){
