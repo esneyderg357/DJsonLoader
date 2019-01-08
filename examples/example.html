@@ -11,7 +11,8 @@
 	<h2>DJsonLoader Examples</h2>
 	
 	<div class="row">
-	<div class="panel panel-default col-md-4">
+	<div class="col-md-4">
+	<div class="panel panel-default col-md-12">
 		<div class="panel-body">
 			<form id="form" class="form-horizontal">
 				<fieldset>
@@ -134,8 +135,10 @@
 			</form>
 		</div>
 	</div>
-		<div class="panel panel-primary col-md-4" id="viewPanel">
-			<div class="panel-heading">No form elements</div>
+	</div>
+	<div class="col-md-8">
+		<div class="panel panel-primary col-md-6" id="viewPanel">
+			<div class="panel-heading">Html elements</div>
 			<div class="panel-body" >
 			
 					<h4>Title: <span data-djload="title">...</span></h4>
@@ -160,7 +163,7 @@
 					</div>
 			</div>
 		</div>
-		<div class="panel panel-default col-md-4" id="specialPanel">
+		<div class="panel panel-default col-md-6" id="specialPanel">
 			<div class="panel-heading">Other features</div>
 			<div class="panel-body">
 
@@ -193,6 +196,58 @@
 				</div>
 			</div>
 	</div>
+		<div class="panel panel-primary col-md-6" id="ajaxPanel">
+			<div class="panel-heading">Ajax features</div>
+			<div class="panel-body">
+				<h4>Load data:</h4>
+					<form id="ajaxform" class="form-horizontal">
+					<fieldset>
+					
+					<legend>Load Form</legend>
+					
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="textarea">Name</label>
+					  <div class="col-md-8">
+					  	<input name="name" type="text" class="form-control input-md">   
+					  </div>
+					</div>
+					
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="last">UserName</label>
+					  <div class="col-md-8">
+					    <input name="username" type="text" class="form-control input-md">
+					  </div>
+					</div>
+					
+					<div class="form-group">
+					  <label class="col-md-4 control-label" for="last">Email</label>
+					  <div class="col-md-8">
+					    <input name="email" type="text" class="form-control input-md">
+					  </div>
+					</div>
+					
+					</fieldset>
+					</form>
+				
+				<h4>Load select options:</h4>
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="select">ajax data</label>
+				  <div class="col-md-8"> 
+				    <select id="ajaxselect" class="form-control" data-djload="ajaxdata">
+				    </select>
+				  </div>
+				</div>
+				
+				<div class="form-group">
+				  <label class="col-md-4 control-label" for="singlebutton"></label>
+				  <div class="col-md-8">
+				    <button type="button" id="reset4" name="singlebutton" class="btn btn-danger">Reset data!</button>
+				    <button type="button" id="load4" name="singlebutton" class="btn btn-primary">Load Json!</button>
+				  </div>
+				</div>
+			</div>
+		</div>
+	</div>
 	</div>
 	
 	
@@ -201,9 +256,9 @@
 	<script type="text/javascript" src="assets/chosen/chosen.jquery.js"></script>
 	<script type="text/javascript" src="../DJsonLoader.js"></script>
 	<script type="text/javascript">
-		
 		$(document).ready(function(){
 			
+			//json data:
 			user={
 				firstname:"David",
 				lastname:"Jerez",
@@ -220,16 +275,18 @@
 				}
 			};
 			
-			
+			//simple form load:
 			$('#load1').click(function(){
 				$("#form").djload(user);
 			});
-			
+		
+			//simple form reset:
 			$('#reset1').click(function(){
 				var f=$("#form");
 				f.djload('reset');
 			});
 			
+			//other json data:
 			post={
 				title:"DJsonLoader",
 				image:"assets/img.jpg",
@@ -237,18 +294,22 @@
 				languages:["spanish","english","french","portuguese"],
 				content:"DJsonLoader is a jquery plugin for loading data obtained in JSON format not only in forms but also in any other HTML container."
 			};
-			
+		
+			//simple html load:
 			$('#load2').click(function(){
 				$("#viewPanel").djload(post);
 			});
-			
+		
+			//simple html reset:
 			$('#reset2').click(function(){
 				$("#viewPanel").djload('reset');
 			});
 			
+			//other json data:
 			var media={
 				main_page:"http://djsonloader.blogspot.com/"
 			};
+			//arrays for load select elements:
 			var levels='["A","B","C","D"]';
 			var fruits=[{id:1,name:"banana",last:false},
 			            {id:2,name:"pineapple",last:true},
@@ -256,6 +317,7 @@
 			
 			$("#specialPanel select").chosen();
 			
+			//load select elements:
 			$('#load3').click(function(){
 				$("#specialPanel").djload(media);
 				
@@ -278,6 +340,7 @@
 				});
 			});
 			
+			//reset select elements:
 			$('#reset3').click(function(){
 				$("#specialPanel").djload('reset');
 				$("#levels").djload('reset',{
@@ -291,6 +354,33 @@
 					}
 				});
 			});
+			
+			//load json data with ajax:
+			$('#load4').click(function(){
+				$('#ajaxform').djload({},{
+	    			ajax:true,
+	    			url:'https://jsonplaceholder.typicode.com/users/1',
+	    			onError: function(result){
+			        	alert('Error on load ajax data!');
+	    			}
+	    		});
+				
+				$('#ajaxselect').djload({},{
+	    			ajax:true,
+	    			url:'https://jsonplaceholder.typicode.com/users',
+	    			svalue:'id',
+	    			slabel:'name',
+	    			onError: function(result){
+			        	alert('Error on load ajax data!');
+	    			}
+	    		});
+			});
+			
+			$('#reset4').click(function(){
+				$('#ajaxform').djload('reset');
+				$('#ajaxselect').djload('reset');
+			});
+			
 		});
 	</script>
 </html>

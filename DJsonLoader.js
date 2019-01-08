@@ -1,8 +1,9 @@
 /*
- *DJsonLoader v1.0.2
+ *DJsonLoader v1.1.0
  *
- * Copyright (C) 2017 David Esneyder Jerez Garnica
+ * Copyright (C) 2019 David Esneyder Jerez Garnica
  * Contact: esneyderg357@gmail.com
+ * https://github.com/esneyderg357/DJsonLoader.git
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -16,7 +17,7 @@
  *
  * See the GNU General Public license <http://www.gnu.org/licenses/gpl-3.0.html>.
  */
-if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.8 or higher.');}
+if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.11.1 or higher.');}
 
 (function ($){
 	
@@ -29,36 +30,18 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 		sempty:false,
 		selabel:'select an option...',
 		sevalue: '',
+		Adata:[],
+		ajax:false,
+		url:'',
+		data:{},
+		method:'post',
 		onLoad:function(){},
-		onReset:function(){}
+		onReset:function(){},
+		onError:function(){}
 	};
 	
-	function loadSelect($select,data,properties){
-		if(!Array.isArray(data))throw new Error("Data required for load select must be array.");
-		var opts='';
-		if(properties.sempty==true){
-			opts+='<option value="'+properties.sevalue+'" selected>'+properties.selabel+'</option>';
-		}
-		if(data.length>0){
-			if(typeof(data[0])=='object'){
-				var verif=properties.sselected!='';
-				for(var i=0;i<data.length;i++){
-					var sel=verif&&data[i][properties.sselected]?' selected ':'';
-					opts+='<option value="'+data[i][properties.svalue]+'" '+sel+' >'+data[i][properties.slabel]+'</option>';
-				}
-			}
-			else {
-				for(var i=0;i<data.length;i++){
-					opts+='<option value="'+data[i]+'">'+data[i]+'</option>';
-				}
-			}
-			
-		}
-		$select.html(opts);
-	}
-	
 	function load($field,value){
-		value=String(value);
+		if(!Array.isArray(value))value=String(value);
 		var tag=$field.prop('tagName');
 		switch(tag.toLowerCase()){
 			case 'input':
@@ -94,12 +77,56 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 						list+='<li>'+value[i]+'</li>';
 					}
 				}
-				else list+='<li>'+val+'</li>';
+				else list+='<li>'+value+'</li>';
 				$field.html(list);
 				break;
 			default:
 				$field.html(value);
 		}
+	}
+	
+	function loadSelect($select,data,properties){
+		if(!Array.isArray(data))throw new Error("Data required for load select must be array.");
+		var opts='';
+		if(properties.sempty==true){
+			opts+='<option value="'+properties.sevalue+'" selected>'+properties.selabel+'</option>';
+		}
+		if(data.length>0){
+			if(typeof(data[0])=='object'){
+				var verif=properties.sselected!='';
+				for(var i=0;i<data.length;i++){
+					var sel=verif&&data[i][properties.sselected]?' selected ':'';
+					var dataAttributes='';
+					for(var j=0;j<properties.Adata.length;j++){
+						dataAttributes+=' data-'+properties.Adata[j]+'="'+data[i][properties.Adata[j]]+'" ';
+					}
+					opts+='<option value="'+data[i][properties.svalue]+'" '+dataAttributes+sel+' >'+data[i][properties.slabel]+'</option>';
+				}
+			}
+			else {
+				for(var i=0;i<data.length;i++){
+					opts+='<option value="'+data[i]+'">'+data[i]+'</option>';
+				}
+			}
+			
+		}
+		$select.html(opts);
+	}
+	
+	function ajaxData(options,v){
+		var prop=$.extend({},defaults,options);
+		$.ajax({
+	        url: prop.url,
+	        type: prop.method,
+	        dataType: 'json',
+	        data: prop.data,
+	        cache: false
+	    }).done(function(resp){
+	    	setData(prop,v,resp.data);
+	    }).fail(function(resp) {
+	    	console.log("ajax load error.");
+	    	prop.onError(resp);
+	    });
 	}
 	
 	function explore($container,json){
@@ -155,6 +182,24 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 		properties.onReset($container);
 	}
 	
+	function setData(prop,v,json){
+		var $container=$(v);
+		var tag=$container.prop('tagName').toLowerCase();
+		if(typeof(json)=='string'){
+			json=JSON.parse(json);
+		}
+		if(prop.reset==true){
+			reset($container,tag,prop);
+		}
+		if(tag=='select'){
+			loadSelect($container,json,prop);
+		}
+		else {
+    		explore($container,json);
+		}
+		prop.onLoad($container);
+	}
+	
 	$.fn.djload=function(json,options) {
 		var prop=$.extend({},defaults,options);
 		if(json=='reset'){
@@ -170,21 +215,12 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 		}
 		
 		else return this.each(function(k,v){
-	    		var $container=$(v);
-	    		var tag=$container.prop('tagName').toLowerCase();
-    			if(typeof(json)=='string'){
-    				json=JSON.parse(json);
-    			}
-	    		if(prop.reset==true){
-	    			reset($container,tag,prop);
-	    		}
-	    		if(tag=='select'){
-	    			loadSelect($container,json,prop);
-	    		}
-	    		else {
-	        		explore($container,json);
-	    		}
-	    		prop.onLoad($container);
+				if(prop.ajax){
+					ajaxData(prop,v);
+				}
+				else {
+					setData(prop,v,json);
+				}
 	    	});
     };
 	

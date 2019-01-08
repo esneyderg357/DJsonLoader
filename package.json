@@ -1,7 +1,7 @@
 {
   "name": "djsonloader",
-  "version": "1.0.2",
-  "description": "DJsonLoader is a jquery plugin for loading data in JSON format not only in forms but also in any other HTML container (div, nav, section, article, etc), in addition the data can be loaded in any form field Or other HTML tags (a, img, p, span, iframe, etc.), simply, quickly and flexibly.",
+  "version": "1.1.0",
+  "description": "DJsonLoader is a jquery add-on for loading data in JSON format into forms or other HTML tags, NOW SUPPORTS AJAX and customization.",
   "main": "./DJsonLoader.js",
   "keywords": [
     "jquery-plugin",
@@ -15,7 +15,10 @@
     "get",
     "post",
     "select",
-    "reset"
+    "reset",
+    "data",
+    "html",
+    "container"
   ],
   "author": {
     "name": "David Esneyder Jerez Garnica",
@@ -28,6 +31,6 @@
   "license": "GPL-3.0",
   "homepage": "http://djsonloader.blogspot.com/",
   "dependencies": {
-    "jquery": ">=1.8"
+    "jquery": ">=1.11.1"
   }
 }

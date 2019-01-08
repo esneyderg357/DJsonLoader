@@ -1,14 +1,16 @@
 ## DJsonLoader-jQuery json loader plugin
 
-Version 1.0.2
+Version 1.1.0
 
-DJsonLoader is a jquery plugin for loading data in JSON format not only in forms but also in any other HTML container (div, nav, section, article, etc), 
-in addition the data can be loaded in any form field Or other HTML tags (a, img, p, span, iframe, etc.), simply, quickly and flexibly.
+DJsonLoader is a jquery plugin for loading data in JSON format in forms,select options or other HTML tags, the data can be downloaded whit AJAX(v1.1.0),
+in addition the data can be loaded in any form field or other tag(input, select, textarea, a, img, p, span, iframe, ul, ol), simply, quickly and flexibly.
 
 It has other features like:
+* JSON data can be downloaded whit AJAX(v1.1.0).
 * Embedded object data can be loaded into other and simple arrays.
 * Reset forms and other HTML containers.
 * Options can be loaded to select tags from simple arrays or objects with multiple configurable options.
+* You can customize data attributes when loading select.
 * You can load all kinds of tags like the src of img, iframe, etc. Or href for links.
 * List elements (ol, ul) can be loaded from simple arrays.
 * Both JSON objects and JSON-formatted strings can be loaded.
@@ -17,6 +19,8 @@ It has other features like:
 ## Documentation
 
 The documentation can be found [here](http://djsonloader.blogspot.com/).
+
+[Git Repository](https://github.com/esneyderg357/DJsonLoader.git).
 
 
 ## Examples
@@ -28,7 +32,7 @@ Using the plugin:
 It is invoked on forms, select fields or any other html container (div, nav, section, article, etc.) as a function to be called when needed, it has the following functions: 
 load JSON data in its container, load options from a select , Reset the data of its container and modify the default parameters.
 
-Loading a form, obtaining json data using Ajax or other means:
+Loading a form, using json data:
 
 			$("#myform").djload(data);
 
@@ -84,6 +88,29 @@ Load the options of a select, using data from an array:
 				sselected:'last'
 			});
 
+Load html using ajax(v1.1.0):
+
+			$('#ajaxform').djload({},{
+	    			ajax:true,
+	    			method: 'get',
+	    			url:'https://jsonplaceholder.typicode.com/users/1',
+	    			onError: function(result){
+			        	alert('Error on load ajax data!');
+	    			}
+	    	});
+	    	
+Load select options using ajax(v1.1.0):	 
+   	
+				$('#ajaxselect').djload({},{
+	    			ajax:true,
+	    			url:'https://jsonplaceholder.typicode.com/users',
+	    			svalue:'id',
+	    			slabel:'name',
+	    			Adata:[email,phone],
+	    			onError: function(result){
+			        	alert('Error on load ajax data!');
+	    			}
+	    		});
 
 You can find html examples on DJsonLoader download.
 
@@ -94,5 +121,5 @@ The DJsonLoader jquery plugin is written by David Esneyder Jerez Garnica.
 
 ## License
 
-Copyright (c) 2017 David Esneyder Jerez Garnica.
+Copyright (c) 2019 David Esneyder Jerez Garnica.
 Released under the GPL v3 license.
