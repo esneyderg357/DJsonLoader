@@ -1,6 +1,6 @@
 ## DJsonLoader-jQuery json loader plugin
 
-Version 1.1.0
+Version 1.2.0
 
 DJsonLoader is a jquery plugin for loading data in JSON format in forms,select options or other HTML tags, the data can be downloaded whit AJAX(v1.1.0),
 in addition the data can be loaded in any form field or other tag(input, select, textarea, a, img, p, span, iframe, ul, ol), simply, quickly and flexibly.
@@ -15,10 +15,9 @@ It has other features like:
 * List elements (ol, ul) can be loaded from simple arrays.
 * Both JSON objects and JSON-formatted strings can be loaded.
 * Data is loaded where the variable matches the name attribute (for form fields), class for any tag or the **data-djload** attribute in general.
+* Complex objects can be loaded using natural prefix notation (object.key).
 
 ## Documentation
-
-The documentation can be found [here](http://djsonloader.blogspot.com/).
 
 [Git Repository](https://github.com/esneyderg357/DJsonLoader.git).
 
@@ -48,9 +47,12 @@ Loading a form, specifying a function that is executed at the end of data loadin
 Loading a form, resetting the data before loading:
 
 			$("#myform").djload(data,{
-				Reset:true
+				Reset:true,
+				imgPrefix: 'assets/images/'
 				}
 			});
+			
+The imgPrefix option especify a path for the images.
 
 Example of valid json data:
 
@@ -63,13 +65,14 @@ Example of valid json data:
 				obs:"pending certification",
 				languages:[1,4,6],
 				lastpost:"DJsonLoader!",
+				photo:"xjcush2.jpg",
 				accessdata:{
 					login:"admin",
 					password:"123",
 					idrole:3
 				}
 			};
-
+To load data from the object accessdata use prefixes: 'accessdata.login' , 'accessdata.password'
 Load the options of a select, using data from an array:
 	
 			//simple
@@ -121,5 +124,5 @@ The DJsonLoader jquery plugin is written by David Esneyder Jerez Garnica.
 
 ## License
 
-Copyright (c) 2019 David Esneyder Jerez Garnica.
+Copyright (c) 2023 David Esneyder Jerez Garnica.
 Released under the GPL v3 license.

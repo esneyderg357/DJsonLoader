@@ -1,7 +1,7 @@
 /*
- *DJsonLoader v1.1.0
+ *DJsonLoader v1.2.0
  *
- * Copyright (C) 2019 David Esneyder Jerez Garnica
+ * Copyright (C) 2023 David Esneyder Jerez Garnica
  * Contact: esneyderg357@gmail.com
  * https://github.com/esneyderg357/DJsonLoader.git
  *
@@ -23,6 +23,7 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 	
 	var defaults={
 		reset: false,
+		imgPrefix: '',
 		resetString:'',
 		slabel:'',
 		svalue:'',
@@ -40,7 +41,7 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 		onError:function(){}
 	};
 	
-	function load($field,value){
+	function load($field,value,prop){
 		if(!Array.isArray(value))value=String(value);
 		var tag=$field.prop('tagName');
 		switch(tag.toLowerCase()){
@@ -66,6 +67,8 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 				$field.attr('href',value);
 				break;
 			case 'img':
+				$field.attr('src',prop.imgPrefix+value);
+				break;
 			case 'iframe':
 				$field.attr('src',value);
 				break;
@@ -129,20 +132,20 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 	    });
 	}
 	
-	function explore($container,json){
+	function explore($container,json,$prefix,prop){
 		if(json!=null&&json!=undefined){
 			$.each(json,function(key,value){
 				var type=typeof(value);
 				var array=Array.isArray(value);
 				if(type=='object'&&!array){
-					explore($container,value);
+					explore($container,value,key+'.',prop);
 				}
 				else {
-					var $fields=$container.find("[name='"+key+"']")
-							.add($container.find("."+key))
-							.add($container.find("[data-djload='"+key+"']"));
+					var $fields=$container.find("[name='"+$prefix+key+"']")
+							.add($container.find("."+$prefix+key))
+							.add($container.find("[data-djload='"+$prefix+key+"']"));
 					for(var i=0;i<$fields.length;i++){
-						load($($fields[i]),value);
+						load($($fields[i]),value,prop);
 					}
 				}
 			});
@@ -195,7 +198,7 @@ if (typeof jQuery==='undefined'){throw new Error('DJsonLoader requires jQuery 1.
 			loadSelect($container,json,prop);
 		}
 		else {
-    		explore($container,json);
+    		explore($container,json,'',prop);
 		}
 		prop.onLoad($container);
 	}

@@ -1,6 +1,6 @@
 {
   "name": "djsonloader",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "DJsonLoader is a jquery add-on for loading data in JSON format into forms or other HTML tags, NOW SUPPORTS AJAX and customization.",
   "main": "./DJsonLoader.js",
   "keywords": [
@@ -29,7 +29,7 @@
     "url": "https://github.com/esneyderg357/DJsonLoader.git"
   },
   "license": "GPL-3.0",
-  "homepage": "http://djsonloader.blogspot.com/",
+  "homepage": "https://github.com/esneyderg357/DJsonLoader",
   "dependencies": {
     "jquery": ">=1.11.1"
   }

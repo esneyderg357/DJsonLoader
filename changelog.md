@@ -1,10 +1,17 @@
 ## DJsonLoader Changelog
 
+## Version 1.2.0
 
+* Fixed bug when data has same attribute names, now they will be loaded using prefixes with "." (object.value).
+* Add new opiton: 'imgPrefix', that allows placing the path from where the images should be loaded.
 
-## Version 1.0.0
+ 
+## Version 1.1.0
 
-Initial release 
+* Add AJAX support!
+* New ajax configuration values.
+* Fixed bug for load list elements whit array types.
+* Customize data attributes when loading select tags options.
 
 
 ## Version 1.0.2
@@ -12,12 +19,10 @@ Initial release
 * Fixed bug whit null and undefined values on json data.
 * Fixed bug for load boolean types on json data.
 
-## Version 1.1.0
 
-* Add AJAX support!
-* New ajax configuration values.
-* Fixed bug for load list elements whit array types.
-* Customize data attributes when loading select tags options.
+## Version 1.0.0
+
+Initial release
 
 
 ## Author
